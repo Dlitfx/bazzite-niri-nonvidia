@@ -1,4 +1,4 @@
-# bazzite-niri-nvidia &nbsp; [![bluebuild build badge](https://github.com/dlitfx/bazzite-test/actions/workflows/build.yml/badge.svg)](https://github.com/dlitfx/bazzite-test/actions/workflows/build.yml)
+# bazzite-niri-nonvidia &nbsp; [![bluebuild build badge](https://github.com/dlitfx/bazzite-test/actions/workflows/build.yml/badge.svg)](https://github.com/dlitfx/bazzite-test/actions/workflows/build.yml)
 
 关于如何基于本模板搭建你自己的仓库，快速上手说明见 [BlueBuild 文档](https://blue-build.org/how-to/setup/)。
 
