@@ -1,45 +1,148 @@
 ---
 # yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
 # image will be published to ghcr.io/<user>/<name>
-name: bazzite-niri-nonvidia
+name: niri-bazzite-nonvidia
 # description will be included in the image's metadata
-description: This is my personal OS image.
+description: This is my personal OS image.Bazzite 底层 + niri/Noctalia 桌面层
 
 # the base image to build on top of (FROM) and the version tag to use
-base-image: ghcr.io/ublue-os/silverblue-main
-image-version: latest # You can pin to a specific version of Fedora as well
+#base-image: ghcr.io/ublue-os/silverblue-main
+#base-image: ghcr.io/ublue-os/base-nvidia
+base-image: ghcr.io/ublue-os/bazzite
+image-version: stable # You can pin to a specific version of Fedora as well
 
 # module configuration, executed in order
 # you can include multiple instances of the same module
-modules:
-  - type: files
-    files:
-      - source: system
-        destination: / # copies files/system/* (* means everything inside it) into your image's root folder /
 
+modules:
   - type: dnf
     repos:
-      copr:
-        - atim/starship
+      cleanup: true
+      #copr:
+      #  - yalter/niri            # 官方，非个人
     install:
       packages:
-        - micro
-        - starship
+        - niri
+        - xwayland-satellite
+        - noctalia               # Fedora 官方源
+        #- umbriel                # 可选，替代 SDDM
+        #- xdg-desktop-portal-umbriel
+        - fuzzel
+        - kitty
+        - udiskie
+        - xdg-user-dirs
+        - gnome-keyring-pam
+        # - bibata-cursor-themes
+        - adw-gtk3-theme
+        - alacritty
+      exclude:
+        - waybar
+        - mako
+        - swaylock
+        - power-profiles-daemon
+    # 禁用 KDE 的 X11/Wayland 视频桥接，niri 下用不到
+    remove:
+      auto-remove: false
+      packages:
+        - xwaylandvideobridge
+
+
+  # 输入法：整族替换
+  - type: dnf
+    repos:
+      cleanup: true
+    install:
+      packages:
+        - fcitx5
+        - fcitx5-chinese-addons
+        - fcitx5-rime
+        - librime-lua
+        - librime-octagram
+        - fcitx5-gtk
+        - fcitx5-qt
+        - fcitx5-configtool
     remove:
       packages:
-        # example: removing firefox (in favor of the flatpak)
-        # "firefox" is the main package, "firefox-langpacks" is a dependency
+        - ibus
+        - ibus-gtk3
+        - ibus-gtk4
+        #- ibus-libs  不安装会影响桌面环境
+        - ibus-setup
+
+  - type: dnf   # 中文字体与语言包
+    repos:
+      cleanup: true
+    install:
+      packages:
+        - default-fonts-cjk-sans
+        - google-noto-sans-cjk-vf-fonts
+        - google-noto-color-emoji-fonts
+        - fira-code-fonts
+        - glibc-all-langpacks
+        - langpacks-zh_CN
+        - langpacks-fonts-zh_CN
+
+  - type: dnf   # 个人软件包
+    repos:
+      # cleanup: true #注释掉后copr会把仓库里的写到新镜像里，可以dnf search搜到。
+      nonfree: rpmfusion #开启社区仓库
+      copr:
+        - hazel-bunny/ports
+        - ackerman/nexus
+        - luorain/open-orpheus
+        - kammer/omadora
+        - oak443/clash-verge-rev    
+    install:
+      packages:
+        # -- remmina和配套软件 --
+        - remmina
+        - remmina-plugins-vnc
+        - remmina-plugins-rdp
+        # ========= END =========
+        # -- url软件，需要定期维护 --
+        - https://github.com/AnInsomniacy/rayburst/releases/download/v4.1.1/Rayburst-4.1.1-1.x86_64.rpm
+        - https://github.com/electerm/electerm/releases/download/v5.7.21/electerm-5.7.21-linux-x86_64.rpm
+        # ========= END =========
+        - chezmoi
+        - gearlever           # 归hazel-bunny/ports
+        - splayer-next        # 归ackerman/nexus
+        - open-orpheus        # 归luorain/open-orpheus
+        - typora              # 归kammer/omadora
+        - clash-verge-rev     # 归oak443/clash-verge-rev
         - firefox
-        - firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
-
-  - type: default-flatpaks
+        - firefox-langpacks
+        - chromium
+        - dgop
+        - meld
+        - obs-studio
+        - haruna
+        - micro
+        - zsh
+        
+  - type: default-flatpaks  # flatpaks 预安装软件包
     configurations:
-      - notify: true # Send notification after install/uninstall is finished (true/false)
+      - notify: true
         scope: system
-        # If no repo information is specified, Flathub will be used by default
-        install: # system flatpaks we want all users to have and not remove
-          - org.mozilla.firefox
-          - org.gnome.Loupe
-      - scope: user # Also add Flathub user repo, but no user packages
+        repo:
+          url: https://mirror.sjtu.edu.cn/flathub/flathub.flatpakrepo
+          name: flathub
+          title: Flathub (SJTU)
+        install:
+          - it.mijorus.gearlever
+          - com.qq.QQ
+          - com.tencent.WeChat
+          - com.github.tchx84.Flatseal
+          - io.github.flattool.Warehouse
+          - com.ranfdev.DistroShelf
+          - com.microsoft.Edge
+          - no.mifi.losslesscut
+          - fr.handbrake.ghb
 
-  - type: signing # this sets up the proper policy & signing files for signed images to work fully
+  - type: files #环境变量设置
+    files:
+      - source: system
+        destination: /
+
+
+
+  - type: signing
