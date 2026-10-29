@@ -102,6 +102,8 @@ modules:
         # -- url软件，需要定期维护 --
         - https://github.com/AnInsomniacy/rayburst/releases/download/v4.1.1/Rayburst-4.1.1-1.x86_64.rpm
         - https://github.com/electerm/electerm/releases/download/v5.7.21/electerm-5.7.21-linux-x86_64.rpm
+        - https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.rpm
+        - https://qqdl.gtimg.cn/qqfile/QQNTV2/9.9.36/release/9ee04bef/QQ_3.2.34_260924_x86_64_01.rpm?sign=e2e88e88445f94d6c5dc2822d9ee2d6a&t=1793247287
         # ========= END =========
         - chezmoi
         - gearlever           # 归hazel-bunny/ports
@@ -129,8 +131,8 @@ modules:
           title: Flathub (SJTU)
         install:
           - it.mijorus.gearlever
-          - com.qq.QQ
-          - com.tencent.WeChat
+          # - com.qq.QQ
+          # - com.tencent.WeChat
           - com.github.tchx84.Flatseal
           - io.github.flattool.Warehouse
           - com.ranfdev.DistroShelf
