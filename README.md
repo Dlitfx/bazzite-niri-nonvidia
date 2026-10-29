@@ -123,34 +123,31 @@ rpm-ostree upgrade
 
 2. 微信fcitx5输入法修复。
 
-   - flatpak安装微信使用输入法在niri桌面下微信可以用，但是输入法主题会回退，样式不统一。
+   - flatpak安装微信使用输入法在niri桌面下可以用，但是输入法主题会回退，样式不统一。
 
-   - 解决方法时不在构建时安装flatpak包，官网下载好后手动安装。
+   - 解决方法是不在构建时安装flatpak包，官网下载好后手动安装。
 
      ```bash
      rpm-ostree instll XXXX.rpm
      ```
 
-   - 若还是无法使用就尝试一下方法：
+   - 若还是无法使用就尝试以下方法：
 
      找到微信的桌面文件。通常位于 /usr/share/applications/ 下，文件名可能是 wechat.desktop 或类似名称。
 
      - 复制到用户目录进行修改（推荐，避免被系统更新覆盖）：
-
-
-     ```bash
-     cp /usr/share/applications/wechat.desktop ~/.local/share/applications/
-     ```
-
-     编辑该文件，找到 Exec= 那一行。在启动命令的最前面加上 env 和相关的变量。修改后应该类似这样：
-
-     ```ini
-     Exec=env QT_IM_MODULE=fcitx GTK_IM_MODULE=fcitx XMODIFIERS=@im=fcitx /usr/bin/wechat %U
-     ```
-
-     具体路径请以你系统里实际的 Exec 行末尾的二进制路径为准。
-
-     保存后，重新从应用菜单启动微信即可。
+     
+       ```bash
+       cp /usr/share/applications/wechat.desktop ~/.local/share/applications/
+       ```
+     
+     -  编辑该文件，找到 Exec= 那一行。在启动命令的最前面加上 env 和相关的变量。修改后应该类似这样：
+     
+       ```ini
+       Exec=env QT_IM_MODULE=fcitx GTK_IM_MODULE=fcitx XMODIFIERS=@im=fcitx /usr/bin/wechat %U
+       ```
+     
+     - 具体路径请以你系统里实际的 Exec 行末尾的二进制路径为准。保存后，重新从应用菜单启动微信即可。
 
    ### 2、软件点击打开文件夹无法应
 
