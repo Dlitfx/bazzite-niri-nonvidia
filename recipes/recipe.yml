@@ -84,13 +84,13 @@ modules:
 
   - type: dnf   # 个人软件包
     repos:
-      # cleanup: true #注释掉后copr会把仓库里的写到新镜像里，可以dnf search搜到。
+      cleanup: true #注释掉后copr会把仓库里的写到新镜像里，可以dnf search搜到。
       nonfree: rpmfusion #开启社区仓库
       copr:
-        - hazel-bunny/ports
+        # - hazel-bunny/ports
         - ackerman/nexus
         - luorain/open-orpheus
-        - kammer/omadora
+        # - kammer/omadora
         - oak443/clash-verge-rev    
     install:
       packages:
@@ -105,10 +105,10 @@ modules:
     
         # ========= END =========
         - chezmoi
-        - gearlever           # 归hazel-bunny/ports
+        # - gearlever           # 归hazel-bunny/ports
         - splayer-next        # 归ackerman/nexus
         - open-orpheus        # 归luorain/open-orpheus
-        - typora              # 归kammer/omadora
+        # - typora              # 归kammer/omadora
         - clash-verge-rev     # 归oak443/clash-verge-rev
         - firefox
         - firefox-langpacks
@@ -138,6 +138,7 @@ modules:
           - com.microsoft.Edge
           - no.mifi.losslesscut
           - fr.handbrake.ghb
+         
 
   - type: files #环境变量设置
     files:
